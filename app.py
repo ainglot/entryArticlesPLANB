@@ -4,7 +4,7 @@ import pandas as pd
 
 # Function to add data to the database
 def add_entry(MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords):
-    conn = sqlite3.connect("PLAN_B.db")
+    conn = sqlite3.connect("inputPLAN_B.db")
     cursor = conn.cursor()
     cursor.execute("""
     INSERT INTO Bibliografia (MitigationName, Type, ScaleOfImplementation, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords) 
