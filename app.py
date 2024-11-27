@@ -3,13 +3,13 @@ import sqlite3
 import pandas as pd
 
 # Function to add data to the database
-def add_entry(title, abstract, year, keywords):
+def add_entry(MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords):
     conn = sqlite3.connect("PLAN_B.db")
     cursor = conn.cursor()
     cursor.execute("""
     INSERT INTO Bibliografia (MitigationName, Type, ScaleOfImplementation, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (title, abstract, year, keywords))
+    """, (MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords))
     conn.commit()
     conn.close()
 
