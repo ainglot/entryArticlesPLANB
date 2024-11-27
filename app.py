@@ -45,7 +45,7 @@ with st.form("entry_form"):
 
 # Podgląd zawartości bazy danych
 if st.checkbox("Show database contents"):
-    conn = sqlite3.connect("PLAN_B.db")
+    conn = sqlite3.connect("inputPLAN_B.db")
     df = pd.read_sql_query("SELECT * FROM Bibliografia", conn)
     conn.close()
     st.write(df)
