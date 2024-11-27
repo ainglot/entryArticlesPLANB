@@ -7,7 +7,7 @@ def add_entry(MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLigh
     conn = sqlite3.connect("inputPLAN_B.db")
     cursor = conn.cursor()
     cursor.execute("""
-    INSERT INTO Bibliografia (MitigationName, Type, ScaleOfImplementation, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords) 
+    INSERT INTO Bibliografia (MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords))
     conn.commit()
