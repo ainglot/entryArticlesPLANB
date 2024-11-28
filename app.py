@@ -3,29 +3,19 @@ import sqlite3
 import pandas as pd
 
 # Function to add data to the database
-def add_entry(MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords):
+def add_entry(data):
     conn = sqlite3.connect("inputPLAN_B.db")
     cursor = conn.cursor()
 
-    # Inserting data with support for None values
+    # Insert data with None values for empty fields
     cursor.execute("""
     INSERT INTO Bibliografia 
-    (MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        MitigationName or None,  # If empty string, replace with None
-        Type or None,
-        Subtype or None,
-        ScaleOfImplementation or None,
-        ImpactOnLightPollution or None,
-        ImpactOnNoisePollution or None,
-        CauseOfPollutionAddressed or None,
-        AdditionalPollutionImpacts or None,
-        Keywords or None
-    ))
+    (MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords, AlignmentWithLandUsePlanning, IntegrationIntoEcologicalNetworks, Feasibility) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, data)
+    
     conn.commit()
     conn.close()
-
 
 def text_input_with_none(label, max_chars=255, key=None):
     """Creates a Streamlit text field with a default value of None."""
@@ -33,63 +23,69 @@ def text_input_with_none(label, max_chars=255, key=None):
     return value if value else None
 
 def selectbox_with_custom_input(label, options, custom_option="Other", key=None):
-    """
-    A function that combines a selectbox and the ability to enter a custom value.
-
-    Args:
-    - label (str): The label for the selectbox.
-    - options (list): A list of available options in the selectbox.
-    - custom_option (str): An option that allows you to enter a custom value.
-    - key (str): The key for the Streamlit component.
-
-    Returns:
-    - str: The value selected or entered by the user.
-    """
-    # Adding the option to enter a custom value to the list of options
+    """Combines a selectbox with the ability to enter a custom value."""
     options_with_custom = options + [custom_option]
-
-    # Selectbox to select values from a list or "Other" option
     selected_option = st.selectbox(label, options_with_custom, key=key)
-
-    # If "Other" is selected, a text box appears for you to enter your own value
     if selected_option == custom_option:
         custom_value = st.text_input(f"Please specify {label.lower()}", key=f"{key}_custom")
         return custom_value if custom_value else None
-
-    # If something is selected from the list, we return this value
     return selected_option
 
 # The main part of the application
-st.title("Bibliography: Adding data to a SQLite database")
+st.title("Light and Noise Pollution Mitigation: Data Entry Application")
 
-# Data entry form
-with st.form("entry_form"):
+# Tabs for different forms
+tab1, tab2 = st.tabs(["Mitigation/Prevention Measure", "Planning and Design Considerations"])
+
+# Tab 1: Mitigation/Prevention Measure
+with tab1:
     st.header("Mitigation/Prevention Measure Details")
+    with st.form("entry_form1"):
+        MitigationName = text_input_with_none("Name of the mitigation activity or solution.")
+        Type = text_input_with_none("Category (e.g., environmental, regulatory, social, planning, technological).")
+        Subtype = text_input_with_none("Specific subcategory under the primary type.")
+        ScaleOfImplementation = selectbox_with_custom_input("Scale of Implementation", ["Local", "National", "Global"])
+        ImpactOnLightPollution = selectbox_with_custom_input("Impact on Light Pollution", ["High", "Moderate", "Minimal", "None"])
+        ImpactOnNoisePollution = selectbox_with_custom_input("Impact on Noise Pollution", ["High", "Moderate", "Minimal", "None"])
+        CauseOfPollutionAddressed = text_input_with_none("Primary causes the measure targets.")
+        AdditionalPollutionImpacts = text_input_with_none("Secondary effects (e.g., air pollution, heat).")
+        Keywords = text_input_with_none("Relevant keywords for categorization and indexing.")
 
-    MitigationName = text_input_with_none("Name of the mitigation activity or solution.", max_chars=255)
-    Type = text_input_with_none("Category (e.g., environmental, regulatory, social, planning, technological).", max_chars=255)
-    Subtype = text_input_with_none("Specific subcategory under the primary type.", max_chars=255)
-    ScaleOfImplementation = selectbox_with_custom_input("Scale of Implementation", ["Local", "National", "Global"])
-    ImpactOnLightPollution = selectbox_with_custom_input("Impact on Light Pollution", ["High", "Moderate", "Minimal", "None"])
-    ImpactOnNoisePollution = selectbox_with_custom_input("Impact on Noise Pollution", ["High", "Moderate", "Minimal", "None"])
-    CauseOfPollutionAddressed = text_input_with_none("Primary causes the measure targets (e.g., traffic, industry, urban lighting).", max_chars=255)
-    AdditionalPollutionImpacts = text_input_with_none("Secondary effects (e.g., air pollution, heat).", max_chars=255)
-    Keywords = text_input_with_none("Relevant keywords for categorization and indexing.")
+        submitted1 = st.form_submit_button("Send Mitigation Data to Base")
 
-    # Button to submit form
-    submitted = st.form_submit_button("Send to base")
+        if submitted1:
+            data = (MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords, None, None, None)
+            if any(data[:9]):  # Check if at least one required field is filled
+                try:
+                    add_entry(data)
+                    st.success("Mitigation data added to the database.")
+                except Exception as e:
+                    st.error(f"An error occurred while adding data: {e}")
+            else:
+                st.warning("Please fill in at least one field of the form.")
 
-    if submitted:
-        if any([MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords]):
-            try:
-                add_entry(MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords)
-                st.success("Added notification to the base.")
-            except Exception as e:
-                st.error(f"An error occurred while adding data: {e}")
-        else:
-            st.warning("Please fill in at least one field of the form.")
+# Tab 2: Planning and Design Considerations
+with tab2:
+    st.header("Planning and Design Considerations")
+    with st.form("entry_form2"):
+        AlignmentWithLandUsePlanning = text_input_with_none("Alignment with Land Use Planning.")
+        IntegrationIntoEcologicalNetworks = text_input_with_none("Integration into Ecological Networks.")
+        Feasibility = text_input_with_none("Feasibility.")
 
-# Podgląd zawartości bazy danych
+        submitted2 = st.form_submit_button("Send Planning Data to Base")
+
+        if submitted2:
+            data = (None, None, None, None, None, None, None, None, None, AlignmentWithLandUsePlanning, IntegrationIntoEcologicalNetworks, Feasibility)
+            if any(data[9:]):  # Check if at least one required field is filled
+                try:
+                    add_entry(data)
+                    st.success("Planning data added to the database.")
+                except Exception as e:
+                    st.error(f"An error occurred while adding data: {e}")
+            else:
+                st.warning("Please fill in at least one field of the form.")
+
+# Preview the contents of the database
 if st.checkbox("Show database contents"):
     conn = sqlite3.connect("inputPLAN_B.db")
     df = pd.read_sql_query("SELECT * FROM Bibliografia", conn)
