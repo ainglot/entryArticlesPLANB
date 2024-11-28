@@ -3,25 +3,44 @@ import sqlite3
 import pandas as pd
 
 # Function to add data to the database
-def add_entry(MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords):
+def add_entry(MitigationName , 	TypeM , 	Subtype , 	ScaleOfImplementation , 	ImpactOnLightPollution , 	ImpactOnNoisePollution , 	CauseOfPollutionAddressed , 	AdditionalPollutionImpacts , 	Keywords , 	AlignmentWithLandUsePlanning , 	IntegrationIntoEcologicalNetworks , 	Feasibility , 	RelevantRegulations , 	RegulatoryChallenges , 	StakeholderAlignment , 	CommunityEngagementLevel , 	BehavioralChangePotential , 	SocioeconomicBenefits , 	TechnologicalSolutionUsed , 	AutomationPotential , 	InnovativeAspects , 	DataDrivenTools , 	ImpactOnBiodiversity , 	ResilienceToClimateChange , 	PotentialAdverseEffects , 	CoBenefits , 	CostRange , 	Timeframe , 	AssessmentMethod , 	ValidationIndicators):
     conn = sqlite3.connect("inputPLAN_B.db")
     cursor = conn.cursor()
 
     # Inserting data with support for None values
     cursor.execute(""" 
     INSERT INTO Bibliografia 
-    (MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (MitigationName , 	TypeM , 	Subtype , 	ScaleOfImplementation , 	ImpactOnLightPollution , 	ImpactOnNoisePollution , 	CauseOfPollutionAddressed , 	AdditionalPollutionImpacts , 	Keywords , 	AlignmentWithLandUsePlanning , 	IntegrationIntoEcologicalNetworks , 	Feasibility , 	RelevantRegulations , 	RegulatoryChallenges , 	StakeholderAlignment , 	CommunityEngagementLevel , 	BehavioralChangePotential , 	SocioeconomicBenefits , 	TechnologicalSolutionUsed , 	AutomationPotential , 	InnovativeAspects , 	DataDrivenTools , 	ImpactOnBiodiversity , 	ResilienceToClimateChange , 	PotentialAdverseEffects , 	CoBenefits , 	CostRange , 	Timeframe , 	AssessmentMethod , 	ValidationIndicators) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         MitigationName or None,  # If empty string, replace with None
-        Type or None,
+        TypeM or None,
         Subtype or None,
         ScaleOfImplementation or None,
         ImpactOnLightPollution or None,
         ImpactOnNoisePollution or None,
         CauseOfPollutionAddressed or None,
         AdditionalPollutionImpacts or None,
-        Keywords or None
+        Keywords or None,
+        RelevantRegulations  or None,
+        RegulatoryChallenges  or None,
+        StakeholderAlignment  or None,
+        CommunityEngagementLevel  or None,
+        BehavioralChangePotential  or None,
+        SocioeconomicBenefits  or None,
+        TechnologicalSolutionUsed  or None,
+        AutomationPotential  or None,
+        InnovativeAspects  or None,
+        DataDrivenTools  or None,
+        ImpactOnBiodiversity  or None,
+        ResilienceToClimateChange  or None,
+        PotentialAdverseEffects  or None,
+        CoBenefits  or None,
+        CostRange  or None,
+        Timeframe  or None,
+        AssessmentMethod  or None,
+        ValidationIndicators 
+
     ))
     conn.commit()
     conn.close()
@@ -63,11 +82,11 @@ def selectbox_with_custom_input(label, options, custom_option="Other", key=None)
 # The main part of the application
 st.title("Light and Noise Pollution Mitigation: Adding data to a SQLite database")
 
-# Data entry form outside the form block
-st.header("Mitigation/Prevention Measure Details")
+# 1. Data entry form outside the form block
+st.header("1. Mitigation/Prevention Measure Details")
 
 MitigationName = text_input_with_none("Name of the mitigation activity or solution.", max_chars=255)
-Type = text_input_with_none("Category (e.g., environmental, regulatory, social, planning, technological).", max_chars=255)
+TypeM = text_input_with_none("Category (e.g., environmental, regulatory, social, planning, technological).", max_chars=255)
 Subtype = text_input_with_none("Specific subcategory under the primary type.", max_chars=255)
 ScaleOfImplementation = selectbox_with_custom_input("Scale of Implementation", ["Local", "National", "Global"], key="other_scale_of_implementation")
 ImpactOnLightPollution = selectbox_with_custom_input("Impact on Light Pollution", ["High", "Moderate", "Minimal", "None"], key="other_impact_on_light_pollution")
@@ -76,18 +95,58 @@ CauseOfPollutionAddressed = text_input_with_none("Primary causes the measure tar
 AdditionalPollutionImpacts = text_input_with_none("Secondary effects (e.g., air pollution, heat).", max_chars=255)
 Keywords = text_input_with_none("Relevant keywords for categorization and indexing.")
 
-# Additional section: Planning and Design Considerations
-st.header("Planning and Design Considerations")
+# 2. Additional section: Planning and Design Considerations
+st.header("2. Planning and Design Considerations")
 
 AlignmentWithLandUsePlanning = text_input_with_none("Alignment with Land Use Planning.")
 IntegrationIntoEcologicalNetworks = text_input_with_none("Integration into Ecological Networks.")
 Feasibility = text_input_with_none("Feasibility.")
 
+# 3. Additional section: Regulatory and Compliance
+st.header("3. Regulatory and Compliance")
+
+RelevantRegulations = text_input_with_none("Applicable legal frameworks and guidelines (e.g., EU Directive 2002/49/WE).")
+RegulatoryChallenges = text_input_with_none("Potential obstacles in legal or policy implementation.")
+StakeholderAlignment = text_input_with_none("Alignment with community, governmental, or business interests.")
+
+# 4. Additional section: Social and Behavioural Aspects
+st.header("4. Social and Behavioural Aspects")
+
+CommunityEngagementLevel = text_input_with_none("Requirement for public awareness campaigns or participation.")
+BehavioralChangePotential = text_input_with_none("Likelihood of inducing long-term behavioral changes.")
+SocioeconomicBenefits = text_input_with_none("Additional benefits for the community, such as improved health or aesthetics.")
+
+# 5. Additional section: Technological Implementation
+st.header("5. Technological Implementation")
+
+TechnologicalSolutionUsed = text_input_with_none("Specific technology (e.g., dimming systems, noise barriers).")
+AutomationPotential = text_input_with_none("Degree of automation and real-time adaptability.")
+InnovativeAspects = text_input_with_none("New technologies or improvements introduced.")
+DataDrivenTools = text_input_with_none("Use of GIS mapping, real-time monitoring, or predictive modelling.")
+
+# 6. Additional section: Environmental Impact and Co-Benefits
+st.header("6. Environmental Impact and Co-Benefits")
+
+ImpactOnBiodiversity = text_input_with_none("Expected improvements in habitat quality or connectivity.")
+ResilienceToClimateChange = text_input_with_none("Contribution to climate adaptation or mitigation.")
+PotentialAdverseEffects = text_input_with_none("Negative impacts, if any, on local ecosystems.")
+CoBenefits = text_input_with_none("Additional benefits like carbon sequestration, aesthetic improvements.")
+
+# 7. Additional section: Cost, Implementation, and Validation
+st.header("7. Cost, Implementation, and Validation")
+
+CostRange = text_input_with_none("Estimated cost for local, national, or global implementation.")
+Timeframe = text_input_with_none("Approximate time required for implementation.")
+AssessmentMethod = text_input_with_none("Methodology to measure success (e.g., EIA, noise mapping, biodiversity surveys).")
+ValidationIndicators = text_input_with_none("Key performance indicators to assess effectiveness.")
+
+
 # Submit button
 if st.button("Send to base"):
-    if any([MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords]):
+    # if any([MitigationName, TypeM, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords]):
+    if any([MitigationName , 	TypeM , 	Subtype , 	ScaleOfImplementation , 	ImpactOnLightPollution , 	ImpactOnNoisePollution , 	CauseOfPollutionAddressed , 	AdditionalPollutionImpacts , 	Keywords , 	AlignmentWithLandUsePlanning , 	IntegrationIntoEcologicalNetworks , 	Feasibility , 	RelevantRegulations , 	RegulatoryChallenges , 	StakeholderAlignment , 	CommunityEngagementLevel , 	BehavioralChangePotential , 	SocioeconomicBenefits , 	TechnologicalSolutionUsed , 	AutomationPotential , 	InnovativeAspects , 	DataDrivenTools , 	ImpactOnBiodiversity , 	ResilienceToClimateChange , 	PotentialAdverseEffects , 	CoBenefits , 	CostRange , 	Timeframe , 	AssessmentMethod , 	ValidationIndicators]):
         try:
-            add_entry(MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords)
+            add_entry(MitigationName , 	TypeM , 	Subtype , 	ScaleOfImplementation , 	ImpactOnLightPollution , 	ImpactOnNoisePollution , 	CauseOfPollutionAddressed , 	AdditionalPollutionImpacts , 	Keywords , 	AlignmentWithLandUsePlanning , 	IntegrationIntoEcologicalNetworks , 	Feasibility , 	RelevantRegulations , 	RegulatoryChallenges , 	StakeholderAlignment , 	CommunityEngagementLevel , 	BehavioralChangePotential , 	SocioeconomicBenefits , 	TechnologicalSolutionUsed , 	AutomationPotential , 	InnovativeAspects , 	DataDrivenTools , 	ImpactOnBiodiversity , 	ResilienceToClimateChange , 	PotentialAdverseEffects , 	CoBenefits , 	CostRange , 	Timeframe , 	AssessmentMethod , 	ValidationIndicators)
             st.success("Added notification to the base.")
         except Exception as e:
             st.error(f"An error occurred while adding data: {e}")
