@@ -53,7 +53,8 @@ def selectbox_with_custom_input(label, options, custom_option="Other", key=None)
 
     # If "Other" is selected, a text box appears for you to enter your own value
     if selected_option == custom_option:
-        custom_value = st.text_input(f"Please specify {label.lower()}", key=f"{key}_custom")
+        custom_key = f"{key}_custom"  # Creating a unique key for each custom input
+        custom_value = st.text_input(f"Please specify {label.lower()}", key=custom_key)
         return custom_value if custom_value else None
 
     # If something is selected from the list, we return this value
