@@ -76,6 +76,13 @@ CauseOfPollutionAddressed = text_input_with_none("Primary causes the measure tar
 AdditionalPollutionImpacts = text_input_with_none("Secondary effects (e.g., air pollution, heat).", max_chars=255)
 Keywords = text_input_with_none("Relevant keywords for categorization and indexing.")
 
+# Additional section: Planning and Design Considerations
+st.header("Planning and Design Considerations")
+
+AlignmentWithLandUsePlanning = text_input_with_none("Alignment with Land Use Planning.")
+IntegrationIntoEcologicalNetworks = text_input_with_none("Integration into Ecological Networks.")
+Feasibility = text_input_with_none("Feasibility.")
+
 # Submit button
 if st.button("Send to base"):
     if any([MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords]):
