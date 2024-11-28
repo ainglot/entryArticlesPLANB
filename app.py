@@ -18,7 +18,7 @@ st.title("Bibliography: Adding data to a SQLite database")
 
 # Data entry form
 with st.form("entry_form"):
-    st.header("Add new publication")
+    st.header("Mitigation/Prevention Measure Details")
 
     MitigationName = st.text_input("Name of the mitigation activity or solution.", max_chars=255)
     Type = st.text_input("Category (e.g., environmental, regulatory, social, planning, technological).", max_chars=255)
