@@ -22,6 +22,9 @@ def add_entry(MitigationName , 	TypeM , 	Subtype , 	ScaleOfImplementation , 	Imp
         CauseOfPollutionAddressed or None,
         AdditionalPollutionImpacts or None,
         Keywords or None,
+        AlignmentWithLandUsePlanning  or None, 
+        IntegrationIntoEcologicalNetworks  or None, 
+        Feasibility  or None, 
         RelevantRegulations  or None,
         RegulatoryChallenges  or None,
         StakeholderAlignment  or None,
@@ -40,7 +43,6 @@ def add_entry(MitigationName , 	TypeM , 	Subtype , 	ScaleOfImplementation , 	Imp
         Timeframe  or None,
         AssessmentMethod  or None,
         ValidationIndicators 
-
     ))
     conn.commit()
     conn.close()
