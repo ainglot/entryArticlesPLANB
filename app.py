@@ -6,12 +6,26 @@ import pandas as pd
 def add_entry(MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords):
     conn = sqlite3.connect("inputPLAN_B.db")
     cursor = conn.cursor()
+
+    # Inserting data with support for None values
     cursor.execute("""
-    INSERT INTO Bibliografia (MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords) 
+    INSERT INTO Bibliografia 
+    (MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords))
+    """, (
+        MitigationName or None,  # If empty string, replace with None
+        Type or None,
+        Subtype or None,
+        ScaleOfImplementation or None,
+        ImpactOnLightPollution or None,
+        ImpactOnNoisePollution or None,
+        CauseOfPollutionAddressed or None,
+        AdditionalPollutionImpacts or None,
+        Keywords or None
+    ))
     conn.commit()
     conn.close()
+
 
 def text_input_with_none(label, max_chars=255, key=None):
     """Creates a Streamlit text field with a default value of None."""
@@ -66,14 +80,14 @@ with st.form("entry_form"):
     submitted = st.form_submit_button("Send to base")
 
     if submitted:
-        if MitigationName and Type and Subtype and ScaleOfImplementation and ImpactOnLightPollution and ImpactOnNoisePollution and CauseOfPollutionAddressed and AdditionalPollutionImpacts and Keywords:
+        if any([MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords]):
             try:
                 add_entry(MitigationName, Type, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords)
-                st.success("The publication has been successfully added to the database.")
+                st.success("Added notification to the base.")
             except Exception as e:
                 st.error(f"An error occurred while adding data: {e}")
         else:
-            st.warning("Please fill in all fields of the form.")
+            st.warning("Please fill in at least one field of the form.")
 
 # Podgląd zawartości bazy danych
 if st.checkbox("Show database contents"):
