@@ -1,51 +1,57 @@
 import streamlit as st
-import sqlite3
+import psycopg2
 import pandas as pd
 
 # Function to add data to the database
-def add_entry(MitigationName , 	TypeM , 	Subtype , 	ScaleOfImplementation , 	ImpactOnLightPollution , 	ImpactOnNoisePollution , 	CauseOfPollutionAddressed , 	AdditionalPollutionImpacts , 	Keywords , 	AlignmentWithLandUsePlanning , 	IntegrationIntoEcologicalNetworks , 	Feasibility , 	RelevantRegulations , 	RegulatoryChallenges , 	StakeholderAlignment , 	CommunityEngagementLevel , 	BehavioralChangePotential , 	SocioeconomicBenefits , 	TechnologicalSolutionUsed , 	AutomationPotential , 	InnovativeAspects , 	DataDrivenTools , 	ImpactOnBiodiversity , 	ResilienceToClimateChange , 	PotentialAdverseEffects , 	CoBenefits , 	CostRange , 	Timeframe , 	AssessmentMethod , 	ValidationIndicators):
-    conn = sqlite3.connect("inputPLAN_B.db")
+def add_entry(MitigationName, TypeM, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution,
+              CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords, AlignmentWithLandUsePlanning,
+              IntegrationIntoEcologicalNetworks, Feasibility, RelevantRegulations, RegulatoryChallenges,
+              StakeholderAlignment, CommunityEngagementLevel, BehavioralChangePotential, SocioeconomicBenefits,
+              TechnologicalSolutionUsed, AutomationPotential, InnovativeAspects, DataDrivenTools, ImpactOnBiodiversity,
+              ResilienceToClimateChange, PotentialAdverseEffects, CoBenefits, CostRange, Timeframe, AssessmentMethod,
+              ValidationIndicators):
+
+    # Połącz się z bazą danych Supabase
+    conn = get_connection()
     cursor = conn.cursor()
 
-    # Inserting data with support for None values
-    cursor.execute(""" 
-    INSERT INTO Bibliografia 
-    (MitigationName , 	TypeM , 	Subtype , 	ScaleOfImplementation , 	ImpactOnLightPollution , 	ImpactOnNoisePollution , 	CauseOfPollutionAddressed , 	AdditionalPollutionImpacts , 	Keywords , 	AlignmentWithLandUsePlanning , 	IntegrationIntoEcologicalNetworks , 	Feasibility , 	RelevantRegulations , 	RegulatoryChallenges , 	StakeholderAlignment , 	CommunityEngagementLevel , 	BehavioralChangePotential , 	SocioeconomicBenefits , 	TechnologicalSolutionUsed , 	AutomationPotential , 	InnovativeAspects , 	DataDrivenTools , 	ImpactOnBiodiversity , 	ResilienceToClimateChange , 	PotentialAdverseEffects , 	CoBenefits , 	CostRange , 	Timeframe , 	AssessmentMethod , 	ValidationIndicators) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    # Wstaw dane do tabeli Mitigation
+    cursor.execute("""
+    INSERT INTO Mitigation (
+        MitigationName, TypeM, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution,
+        CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords, AlignmentWithLandUsePlanning,
+        IntegrationIntoEcologicalNetworks, Feasibility, RelevantRegulations, RegulatoryChallenges,
+        StakeholderAlignment, CommunityEngagementLevel, BehavioralChangePotential, SocioeconomicBenefits,
+        TechnologicalSolutionUsed, AutomationPotential, InnovativeAspects, DataDrivenTools, ImpactOnBiodiversity,
+        ResilienceToClimateChange, PotentialAdverseEffects, CoBenefits, CostRange, Timeframe, AssessmentMethod,
+        ValidationIndicators
+    )
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """, (
-        MitigationName or None,  # If empty string, replace with None
-        TypeM or None,
-        Subtype or None,
-        ScaleOfImplementation or None,
-        ImpactOnLightPollution or None,
-        ImpactOnNoisePollution or None,
-        CauseOfPollutionAddressed or None,
-        AdditionalPollutionImpacts or None,
-        Keywords or None,
-        AlignmentWithLandUsePlanning  or None, 
-        IntegrationIntoEcologicalNetworks  or None, 
-        Feasibility  or None, 
-        RelevantRegulations  or None,
-        RegulatoryChallenges  or None,
-        StakeholderAlignment  or None,
-        CommunityEngagementLevel  or None,
-        BehavioralChangePotential  or None,
-        SocioeconomicBenefits  or None,
-        TechnologicalSolutionUsed  or None,
-        AutomationPotential  or None,
-        InnovativeAspects  or None,
-        DataDrivenTools  or None,
-        ImpactOnBiodiversity  or None,
-        ResilienceToClimateChange  or None,
-        PotentialAdverseEffects  or None,
-        CoBenefits  or None,
-        CostRange  or None,
-        Timeframe  or None,
-        AssessmentMethod  or None,
-        ValidationIndicators 
+        MitigationName, TypeM, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution,
+        CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords, AlignmentWithLandUsePlanning,
+        IntegrationIntoEcologicalNetworks, Feasibility, RelevantRegulations, RegulatoryChallenges,
+        StakeholderAlignment, CommunityEngagementLevel, BehavioralChangePotential, SocioeconomicBenefits,
+        TechnologicalSolutionUsed, AutomationPotential, InnovativeAspects, DataDrivenTools, ImpactOnBiodiversity,
+        ResilienceToClimateChange, PotentialAdverseEffects, CoBenefits, CostRange, Timeframe, AssessmentMethod,
+        ValidationIndicators
     ))
+
     conn.commit()
+    cursor.close()
     conn.close()
+    st.success("Data added successfully to Supabase!")
+
+
+# Function to establish a connection to Supabase PostgreSQL
+def get_connection():
+    return psycopg2.connect(
+        host=st.secrets["database"]["host"],
+        database=st.secrets["database"]["database"],
+        user=st.secrets["database"]["user"],
+        password=st.secrets["database"]["password"],
+        port=st.secrets["database"]["port"]
+    )
 
 
 def text_input_with_none(label, max_chars=255, key=None):
@@ -157,7 +163,8 @@ if st.button("Send to base"):
 
 # Preview the contents of the database
 if st.checkbox("Show database contents"):
-    conn = sqlite3.connect("inputPLAN_B.db")
-    df = pd.read_sql_query("SELECT * FROM Bibliografia", conn)
+    conn = get_connection()
+    df = pd.read_sql_query("SELECT * FROM Mitigation", conn)
     conn.close()
     st.write(df)
+
