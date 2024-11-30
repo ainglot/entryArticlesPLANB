@@ -1,8 +1,15 @@
 import streamlit as st
 import psycopg2
 import pandas as pd
+from sqlalchemy import create_engine
+from sqlalchemy import Table, MetaData
+from supabase import create_client, Client
 
-# Function to add data to the database
+def init_supabase_client():
+    url = st.secrets["supabase"]["url"]
+    key = st.secrets["supabase"]["key"]
+    return create_client(url, key)
+
 def add_entry(MitigationName, TypeM, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution,
               CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords, AlignmentWithLandUsePlanning,
               IntegrationIntoEcologicalNetworks, Feasibility, RelevantRegulations, RegulatoryChallenges,
@@ -11,47 +18,66 @@ def add_entry(MitigationName, TypeM, Subtype, ScaleOfImplementation, ImpactOnLig
               ResilienceToClimateChange, PotentialAdverseEffects, CoBenefits, CostRange, Timeframe, AssessmentMethod,
               ValidationIndicators):
 
-    # Połącz się z bazą danych Supabase
-    conn = get_connection()
-    cursor = conn.cursor()
+    # Konfiguracja klienta Supabase
+    supabase_url = "https://rxrsynefraehciczistw.supabase.co"  # Wstaw swój URL
+    supabase_anon_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4cnN5bmVmcmFlaGNpY3ppc3R3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI4NTkzODcsImV4cCI6MjA0ODQzNTM4N30.SJ-fggQEkBI4Pbza1J_V68HQVjElrfhPE320rb6tc4Y"   # Wstaw swój klucz anon
+    supabase = create_client(supabase_url, supabase_anon_key)
 
-    # Wstaw dane do tabeli Mitigation
-    cursor.execute("""
-    INSERT INTO Mitigation (
-        MitigationName, TypeM, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution,
-        CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords, AlignmentWithLandUsePlanning,
-        IntegrationIntoEcologicalNetworks, Feasibility, RelevantRegulations, RegulatoryChallenges,
-        StakeholderAlignment, CommunityEngagementLevel, BehavioralChangePotential, SocioeconomicBenefits,
-        TechnologicalSolutionUsed, AutomationPotential, InnovativeAspects, DataDrivenTools, ImpactOnBiodiversity,
-        ResilienceToClimateChange, PotentialAdverseEffects, CoBenefits, CostRange, Timeframe, AssessmentMethod,
-        ValidationIndicators
-    )
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    """, (
-        MitigationName, TypeM, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution,
-        CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords, AlignmentWithLandUsePlanning,
-        IntegrationIntoEcologicalNetworks, Feasibility, RelevantRegulations, RegulatoryChallenges,
-        StakeholderAlignment, CommunityEngagementLevel, BehavioralChangePotential, SocioeconomicBenefits,
-        TechnologicalSolutionUsed, AutomationPotential, InnovativeAspects, DataDrivenTools, ImpactOnBiodiversity,
-        ResilienceToClimateChange, PotentialAdverseEffects, CoBenefits, CostRange, Timeframe, AssessmentMethod,
-        ValidationIndicators
-    ))
+    # Dane do wstawienia
+    data = {
+        "mitigationname": MitigationName,
+        "typem": TypeM,
+        "subtype": Subtype,
+        "scaleofimplementation": ScaleOfImplementation,
+        "impactonlightpollution": ImpactOnLightPollution,
+        "impactonnoisepollution": ImpactOnNoisePollution,
+        "causeofpollutionaddressed": CauseOfPollutionAddressed,
+        "additionalpollutionimpacts": AdditionalPollutionImpacts,
+        "keywords": Keywords,
+        "alignmentwithlanduseplanning": AlignmentWithLandUsePlanning,
+        "integrationintoecologicalnetworks": IntegrationIntoEcologicalNetworks,
+        "feasibility": Feasibility,
+        "relevantregulations": RelevantRegulations,
+        "regulatorychallenges": RegulatoryChallenges,
+        "stakeholderalignment": StakeholderAlignment,
+        "communityengagementlevel": CommunityEngagementLevel,
+        "behavioralchangepotential": BehavioralChangePotential,
+        "socioeconomicbenefits": SocioeconomicBenefits,
+        "technologicalsolutionused": TechnologicalSolutionUsed,
+        "automationpotential": AutomationPotential,
+        "innovativeaspects": InnovativeAspects,
+        "datadriventools": DataDrivenTools,
+        "impactonbiodiversity": ImpactOnBiodiversity,
+        "resiliencetoclimatechange": ResilienceToClimateChange,
+        "potentialadverseeffects": PotentialAdverseEffects,
+        "cobenefits": CoBenefits,
+        "costrange": CostRange,
+        "timeframe": Timeframe,
+        "assessmentmethod": AssessmentMethod,
+        "validationindicators": ValidationIndicators
+    }
 
-    conn.commit()
-    cursor.close()
-    conn.close()
-    st.success("Data added successfully to Supabase!")
-
+    # Insert data into Mitigation table
+    try:
+        response = supabase.table("mitigation").insert([data]).execute()
+        if response.data:  # Success code for data insertion
+            st.success("Data added successfully!")
+        elif response.error_message:  # If an error has occurred
+            print(f"Data insertion error: {response.error_message}")
+        else:
+            st.error(f"Failed to insert data: {response.json()}")
+    except Exception as e:
+        st.error(f"Error: {e}")
 
 # Function to establish a connection to Supabase PostgreSQL
 def get_connection():
-    return psycopg2.connect(
-        host=st.secrets["database"]["host"],
-        database=st.secrets["database"]["database"],
-        user=st.secrets["database"]["user"],
-        password=st.secrets["database"]["password"],
-        port=st.secrets["database"]["port"]
-    )
+    # Tworzymy URL połączenia dla SQLAlchemy
+    db_url = f"postgresql://{st.secrets['database']['user']}:{st.secrets['database']['password']}@{st.secrets['database']['host']}:{st.secrets['database']['port']}/{st.secrets['database']['database']}"
+    
+    # Tworzymy obiekt engine z SQLAlchemy
+    engine = create_engine(db_url)
+    
+    return engine
 
 
 def text_input_with_none(label, max_chars=255, key=None):
@@ -88,7 +114,7 @@ def selectbox_with_custom_input(label, options, custom_option="Other", key=None)
     return selected_option
 
 # The main part of the application
-st.title("Light and Noise Pollution Mitigation: Adding data to a SQLite database")
+st.title("Light and Noise Pollution Mitigation: Adding Data to PostgreSQL Database")
 
 # 1. Data entry form outside the form block
 st.header("1. Mitigation/Prevention Measure Details")
@@ -151,7 +177,6 @@ ValidationIndicators = text_input_with_none("Key performance indicators to asses
 
 # Submit button
 if st.button("Send to base"):
-    # if any([MitigationName, TypeM, Subtype, ScaleOfImplementation, ImpactOnLightPollution, ImpactOnNoisePollution, CauseOfPollutionAddressed, AdditionalPollutionImpacts, Keywords]):
     if any([MitigationName , 	TypeM , 	Subtype , 	ScaleOfImplementation , 	ImpactOnLightPollution , 	ImpactOnNoisePollution , 	CauseOfPollutionAddressed , 	AdditionalPollutionImpacts , 	Keywords , 	AlignmentWithLandUsePlanning , 	IntegrationIntoEcologicalNetworks , 	Feasibility , 	RelevantRegulations , 	RegulatoryChallenges , 	StakeholderAlignment , 	CommunityEngagementLevel , 	BehavioralChangePotential , 	SocioeconomicBenefits , 	TechnologicalSolutionUsed , 	AutomationPotential , 	InnovativeAspects , 	DataDrivenTools , 	ImpactOnBiodiversity , 	ResilienceToClimateChange , 	PotentialAdverseEffects , 	CoBenefits , 	CostRange , 	Timeframe , 	AssessmentMethod , 	ValidationIndicators]):
         try:
             add_entry(MitigationName , 	TypeM , 	Subtype , 	ScaleOfImplementation , 	ImpactOnLightPollution , 	ImpactOnNoisePollution , 	CauseOfPollutionAddressed , 	AdditionalPollutionImpacts , 	Keywords , 	AlignmentWithLandUsePlanning , 	IntegrationIntoEcologicalNetworks , 	Feasibility , 	RelevantRegulations , 	RegulatoryChallenges , 	StakeholderAlignment , 	CommunityEngagementLevel , 	BehavioralChangePotential , 	SocioeconomicBenefits , 	TechnologicalSolutionUsed , 	AutomationPotential , 	InnovativeAspects , 	DataDrivenTools , 	ImpactOnBiodiversity , 	ResilienceToClimateChange , 	PotentialAdverseEffects , 	CoBenefits , 	CostRange , 	Timeframe , 	AssessmentMethod , 	ValidationIndicators)
@@ -163,8 +188,12 @@ if st.button("Send to base"):
 
 # Preview the contents of the database
 if st.checkbox("Show database contents"):
-    conn = get_connection()
-    df = pd.read_sql_query("SELECT * FROM Mitigation", conn)
-    conn.close()
-    st.write(df)
+    try:
+        with get_connection().connect() as conn:
+            df = pd.read_sql_query("SELECT * FROM Mitigation", conn)
+            st.dataframe(df)  # Dynamiczny widok tabeli
+    except Exception as e:
+        st.error(f"Failed to connect to database: {e}")
+
+
 
