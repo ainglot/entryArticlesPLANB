@@ -4,6 +4,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy import Table, MetaData
 from supabase import create_client, Client
+from datetime import datetime
 
 def init_supabase_client():
     url = st.secrets["supabase"]["url"]
@@ -54,7 +55,8 @@ def add_entry(MitigationName, TypeM, Subtype, ScaleOfImplementation, ImpactOnLig
         "costrange": CostRange,
         "timeframe": Timeframe,
         "assessmentmethod": AssessmentMethod,
-        "validationindicators": ValidationIndicators
+        "validationindicators": ValidationIndicators,
+        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
     # Insert data into Mitigation table
