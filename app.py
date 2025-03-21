@@ -127,54 +127,54 @@ Subtype = text_input_with_none("Specific subcategory under the primary type.", m
 ScaleOfImplementation = selectbox_with_custom_input("Scale of Implementation", ["Local", "National", "Global", "None"], key="other_scale_of_implementation")
 ImpactOnLightPollution = selectbox_with_custom_input("Impact on Light Pollution", ["High", "Moderate", "Minimal", "None"], key="other_impact_on_light_pollution")
 ImpactOnNoisePollution = selectbox_with_custom_input("Impact on Noise Pollution", ["High", "Moderate", "Minimal", "None"], key="other_impact_on_noise_pollution")
-CauseOfPollutionAddressed = text_input_with_none("Primary causes the measure targets (e.g., traffic, industry, urban lighting).", max_chars=255) # Wpisanie tekstu
-AdditionalPollutionImpacts = text_input_with_none("Secondary effects (e.g., air pollution, heat).", max_chars=255) # Wpisanie tekstu
-Keywords = text_input_with_none("Relevant keywords for categorization and indexing.") # Lista słów kluczowych; wybór więcej niż jednego (sklejenie do jednego pola za pomocą separatora średnika)
+CauseOfPollutionAddressed = text_input_with_none("Primary causes the measure targets (e.g., traffic, industry, urban lighting).", max_chars=5000) # Wpisanie tekstu
+AdditionalPollutionImpacts = text_input_with_none("Secondary effects (e.g., air pollution, heat).", max_chars=5000) # Wpisanie tekstu
+Keywords = text_input_with_none("Relevant keywords for categorization and indexing.", max_chars=5000) # Lista słów kluczowych; wybór więcej niż jednego (sklejenie do jednego pola za pomocą separatora średnika)
 
 # 2. Additional section: Planning and Design Considerations
 st.header("2. Planning and Design Considerations")
 
-AlignmentWithLandUsePlanning = text_input_with_none("Alignment with Land Use Planning.") # ?
-IntegrationIntoEcologicalNetworks = text_input_with_none("Integration into Ecological Networks.") # 
-Feasibility = text_input_with_none("Feasibility.")
+AlignmentWithLandUsePlanning = text_input_with_none("Alignment with Land Use Planning.", max_chars=10000) # ?
+IntegrationIntoEcologicalNetworks = text_input_with_none("Integration into Ecological Networks.", max_chars=10000) # 
+Feasibility = text_input_with_none("Feasibility.", max_chars=10000)
 
 # 3. Additional section: Regulatory and Compliance
 st.header("3. Regulatory and Compliance")
 
-RelevantRegulations = text_input_with_none("Applicable legal frameworks and guidelines (e.g., EU Directive 2002/49/WE).")
-RegulatoryChallenges = text_input_with_none("Potential obstacles in legal or policy implementation.")
-StakeholderAlignment = text_input_with_none("Alignment with community, governmental, or business interests.")
+RelevantRegulations = text_input_with_none("Applicable legal frameworks and guidelines (e.g., EU Directive 2002/49/WE).", max_chars=10000)
+RegulatoryChallenges = text_input_with_none("Potential obstacles in legal or policy implementation.", max_chars=10000)
+StakeholderAlignment = text_input_with_none("Alignment with community, governmental, or business interests.", max_chars=10000)
 
 # 4. Additional section: Social and Behavioural Aspects
 st.header("4. Social and Behavioural Aspects")
 
-CommunityEngagementLevel = text_input_with_none("Requirement for public awareness campaigns or participation.")
-BehavioralChangePotential = text_input_with_none("Likelihood of inducing long-term behavioral changes.")
-SocioeconomicBenefits = text_input_with_none("Additional benefits for the community, such as improved health or aesthetics.")
+CommunityEngagementLevel = text_input_with_none("Requirement for public awareness campaigns or participation.", max_chars=10000)
+BehavioralChangePotential = text_input_with_none("Likelihood of inducing long-term behavioral changes.", max_chars=10000)
+SocioeconomicBenefits = text_input_with_none("Additional benefits for the community, such as improved health or aesthetics.", max_chars=10000)
 
 # 5. Additional section: Technological Implementation
 st.header("5. Technological Implementation")
 
-TechnologicalSolutionUsed = text_input_with_none("Specific technology (e.g., dimming systems, noise barriers).")
-AutomationPotential = text_input_with_none("Degree of automation and real-time adaptability.")
-InnovativeAspects = text_input_with_none("New technologies or improvements introduced.")
-DataDrivenTools = text_input_with_none("Use of GIS mapping, real-time monitoring, or predictive modelling.")
+TechnologicalSolutionUsed = text_input_with_none("Specific technology (e.g., dimming systems, noise barriers).", max_chars=10000)
+AutomationPotential = text_input_with_none("Degree of automation and real-time adaptability.", max_chars=10000)
+InnovativeAspects = text_input_with_none("New technologies or improvements introduced.", max_chars=10000)
+DataDrivenTools = text_input_with_none("Use of GIS mapping, real-time monitoring, or predictive modelling.", max_chars=10000)
 
 # 6. Additional section: Environmental Impact and Co-Benefits
 st.header("6. Environmental Impact and Co-Benefits")
 
-ImpactOnBiodiversity = text_input_with_none("Expected improvements in habitat quality or connectivity.")
-ResilienceToClimateChange = text_input_with_none("Contribution to climate adaptation or mitigation.")
-PotentialAdverseEffects = text_input_with_none("Negative impacts, if any, on local ecosystems.")
-CoBenefits = text_input_with_none("Additional benefits like carbon sequestration, aesthetic improvements.")
+ImpactOnBiodiversity = text_input_with_none("Expected improvements in habitat quality or connectivity.", max_chars=10000)
+ResilienceToClimateChange = text_input_with_none("Contribution to climate adaptation or mitigation.", max_chars=10000)
+PotentialAdverseEffects = text_input_with_none("Negative impacts, if any, on local ecosystems.", max_chars=10000)
+CoBenefits = text_input_with_none("Additional benefits like carbon sequestration, aesthetic improvements.", max_chars=10000)
 
 # 7. Additional section: Cost, Implementation, and Validation
 st.header("7. Cost, Implementation, and Validation")
 
-CostRange = text_input_with_none("Estimated cost for local, national, or global implementation.")
-Timeframe = text_input_with_none("Approximate time required for implementation.")
-AssessmentMethod = text_input_with_none("Methodology to measure success (e.g., EIA, noise mapping, biodiversity surveys).")
-ValidationIndicators = text_input_with_none("Key performance indicators to assess effectiveness.")
+CostRange = text_input_with_none("Estimated cost for local, national, or global implementation.", max_chars=10000)
+Timeframe = text_input_with_none("Approximate time required for implementation.", max_chars=10000)
+AssessmentMethod = text_input_with_none("Methodology to measure success (e.g., EIA, noise mapping, biodiversity surveys).", max_chars=10000)
+ValidationIndicators = text_input_with_none("Key performance indicators to assess effectiveness.", max_chars=10000)
 
 
 # Submit button
