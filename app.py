@@ -122,20 +122,20 @@ st.title("Light and Noise Pollution Mitigation: Adding Data to PostgreSQL Databa
 st.header("1. Mitigation/Prevention Measure Details")
 
 MitigationName = text_input_with_none("Name of the mitigation activity or solution.", max_chars=255)
-TypeM = text_input_with_none("Category (e.g., environmental, regulatory, social, planning, technological).", max_chars=255)
-Subtype = text_input_with_none("Specific subcategory under the primary type.", max_chars=255)
-ScaleOfImplementation = selectbox_with_custom_input("Scale of Implementation", ["Local", "National", "Global"], key="other_scale_of_implementation")
+TypeM = text_input_with_none("Category (e.g., environmental, regulatory, social, planning, technological).", max_chars=1500) # Lista rozwijalna; opcja wyboru kilku; brak - do wyboru
+Subtype = text_input_with_none("Specific subcategory under the primary type.", max_chars=1500) # Wpisany tekst
+ScaleOfImplementation = selectbox_with_custom_input("Scale of Implementation", ["Local", "National", "Global", "None"], key="other_scale_of_implementation")
 ImpactOnLightPollution = selectbox_with_custom_input("Impact on Light Pollution", ["High", "Moderate", "Minimal", "None"], key="other_impact_on_light_pollution")
 ImpactOnNoisePollution = selectbox_with_custom_input("Impact on Noise Pollution", ["High", "Moderate", "Minimal", "None"], key="other_impact_on_noise_pollution")
-CauseOfPollutionAddressed = text_input_with_none("Primary causes the measure targets (e.g., traffic, industry, urban lighting).", max_chars=255)
-AdditionalPollutionImpacts = text_input_with_none("Secondary effects (e.g., air pollution, heat).", max_chars=255)
-Keywords = text_input_with_none("Relevant keywords for categorization and indexing.")
+CauseOfPollutionAddressed = text_input_with_none("Primary causes the measure targets (e.g., traffic, industry, urban lighting).", max_chars=255) # Wpisanie tekstu
+AdditionalPollutionImpacts = text_input_with_none("Secondary effects (e.g., air pollution, heat).", max_chars=255) # Wpisanie tekstu
+Keywords = text_input_with_none("Relevant keywords for categorization and indexing.") # Lista słów kluczowych; wybór więcej niż jednego (sklejenie do jednego pola za pomocą separatora średnika)
 
 # 2. Additional section: Planning and Design Considerations
 st.header("2. Planning and Design Considerations")
 
-AlignmentWithLandUsePlanning = text_input_with_none("Alignment with Land Use Planning.")
-IntegrationIntoEcologicalNetworks = text_input_with_none("Integration into Ecological Networks.")
+AlignmentWithLandUsePlanning = text_input_with_none("Alignment with Land Use Planning.") # ?
+IntegrationIntoEcologicalNetworks = text_input_with_none("Integration into Ecological Networks.") # 
 Feasibility = text_input_with_none("Feasibility.")
 
 # 3. Additional section: Regulatory and Compliance
